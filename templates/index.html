@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic School Search Form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#id_oblast').change(function() {
+                var oblastId = $(this).val();
+                $.ajax({
+                    url: '/ajax/get_regions/' + oblastId + '/',
+                    success: function(data) {
+                        var regionSelect = $('#id_region');
+                        regionSelect.empty();
+                        regionSelect.append('<option value="">Выберите из списка</option>');
+                        $.each(data.regions, function(key, value) {
+                            regionSelect.append('<option value="' + value[0] + '">' + value[1] + '</option>');
+                        });
+                    }
+                });
+            });
+
+            $('#id_region').change(function() {
+                var regionId = $(this).val();
+                $.ajax({
+                    url: '/ajax/get_neighborhoods/' + regionId + '/',
+                    success: function(data) {
+                        var neighborhoodSelect = $('#id_neighborhood');
+                        neighborhoodSelect.empty();
+                        neighborhoodSelect.append('<option value="">Выберите из списка</option>');
+                        $.each(data.neighborhoods, function(key, value) {
+                            neighborhoodSelect.append('<option value="' + value[0] + '">' + value[1] + '</option>');
+                        });
+                    }
+                });
+            });
+
+            $('#id_neighborhood').change(function() {
+                var neighborhoodId = $(this).val();
+                $.ajax({
+                    url: '/ajax/get_streets/' + neighborhoodId + '/',
+                    success: function(data) {
+                        var streetSelect = $('#id_street');
+                        streetSelect.empty();
+                        streetSelect.append('<option value="">Выберите из списка</option>');
+                        $.each(data.streets, function(key, value) {
+                            streetSelect.append('<option value="' + value[0] + '">' + value[1] + '</option>');
+                        });
+                    }
+                });
+            });
+
+            $('#id_street').change(function() {
+                var streetId = $(this).val();
+                $.ajax({
+                    url: '/ajax/get_houses/' + streetId + '/',
+                    success: function(data) {
+                        var houseSelect = $('#id_house');
+                        houseSelect.empty();
+                        houseSelect.append('<option value="">Выберите из списка</option>');
+                        $.each(data.houses, function(key, value) {
+                            houseSelect.append('<option value="' + value[0] + '">' + value[1] + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Dynamic School Search Form</h1>
+    <form method="post" id="search-school-form">
+        {% csrf_token %}
+        <label for="id_oblast">ОБЛАСТЬ</label>
+        <select id="id_oblast" name="oblast">
+            <option value="">Выберите из списка</option>
+            {% for id, name in form.oblast.field.choices %}
+                <option value="{{ id }}">{{ name }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label for="id_region">РЕГИОН</label>
+        <select id="id_region" name="region">
+            <option value="">Выберите из списка</option>
+        </select>
+        <br><br>
+
+        <label for="id_neighborhood">СХОДЫ ГРАЖДАН МАХАЛЛЕЙ</label>
+        <select id="id_neighborhood" name="neighborhood">
+            <option value="">Выберите из списка</option>
+        </select>
+        <br><br>
+
+        <label for="id_street">УЛИЦА</label>
+        <select id="id_street" name="street">
+            <option value="">Выберите из списка</option>
+        </select>
+        <br><br>
+
+        <label for="id_house">ДОМ</label>
+        <select id="id_house" name="house">
+            <option value="">Выберите из списка</option>
+        </select>
+        <br><br>
+
+        <label for="id_lang_edu">ЯЗЫК ОБУЧЕНИЯ</label>
+        <select id="id_lang_edu" name="lang_edu">
+            <option value="">Выберите из списка</option>
+            {% for id, name in form.lang_edu.field.choices %}
+                <option value="{{ id }}">{{ name }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <button type="submit">Поиск</button>
+    </form>
+</body>
+</html>

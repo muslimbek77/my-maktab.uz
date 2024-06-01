@@ -21,13 +21,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mymaktab'
+    'mymaktab',
 ]
 
 MIDDLEWARE = [
@@ -112,3 +113,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import os
+
+# ... other settings
+
+# Assuming GDAL is installed in /usr/lib/ (adjust the path as needed)
+GDAL_LIBRARY_PATH = os.path.join('/usr', 'lib')
